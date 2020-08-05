@@ -12,7 +12,7 @@
     <artifactId>algafood-auth</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>algafood-auth</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Authorization Server do AlgaFood</description>
 
     <properties>
         <java.version>11</java.version>
