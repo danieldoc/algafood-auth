@@ -33,7 +33,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                     .withClient("algafood-mobile")
                     .secret(passwordEncoder.encode("321bew"))
                     .authorizedGrantTypes("password")
-                    .scopes("write", "read");
+                    .scopes("write", "read")
+                .and()
+                    .withClient("check-token")
+                    .secret(passwordEncoder.encode("123web"))
+                    .authorizedGrantTypes("password")
+                    .scopes("read");
     }
 
     @Override
