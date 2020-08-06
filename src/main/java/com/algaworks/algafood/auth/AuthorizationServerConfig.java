@@ -38,9 +38,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                     .accessTokenValiditySeconds(UMA_HORA_SEGUNDOS * 6) // 6 horas
                     .refreshTokenValiditySeconds(UM_DIA_SEGUNDOS * 15) // 15 dias
                 .and()
-                    .withClient("algafood-mobile")
-                    .secret(passwordEncoder.encode("321bew"))
-                    .authorizedGrantTypes("password")
+                    .withClient("faturamento")
+                    .secret(passwordEncoder.encode("faturamento123"))
+                    .authorizedGrantTypes("client_credentials")
                     .scopes("write", "read")
                 .and()
                     .withClient("check-token")
