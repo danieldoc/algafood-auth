@@ -26,13 +26,17 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+        final int UMA_HORA_SEGUNDOS = 60 * 60;
+        final int UM_DIA_SEGUNDOS = UMA_HORA_SEGUNDOS * 24;
+
         clients
                 .inMemory()
                     .withClient("algafood-web-client")
                     .secret(passwordEncoder.encode("web123"))
                     .authorizedGrantTypes("password", "refresh_token")
                     .scopes("write", "read")
-                    .accessTokenValiditySeconds(60 * 60 * 6)
+                    .accessTokenValiditySeconds(UMA_HORA_SEGUNDOS * 6) // 6 horas
+                    .refreshTokenValiditySeconds(UM_DIA_SEGUNDOS * 15) // 15 dias
                 .and()
                     .withClient("algafood-mobile")
                     .secret(passwordEncoder.encode("321bew"))
@@ -53,6 +57,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints
                 .authenticationManager(authenticationManager)
-                .userDetailsService(userDetailsService);
+                .userDetailsService(userDetailsService)
+                .reuseRefreshTokens(false);
     }
 }
