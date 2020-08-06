@@ -38,12 +38,20 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                     .accessTokenValiditySeconds(UMA_HORA_SEGUNDOS * 6) // 6 horas
                     .refreshTokenValiditySeconds(UM_DIA_SEGUNDOS * 15) // 15 dias
 
+                // http://localhost:8081/oauth/authorize?response_type=code&client_id=foodanalytics&state=abc&redirect_uri=http://analytics.algafood.com
                 .and()
                     .withClient("foodanalytics")
                     .secret(passwordEncoder.encode("analytics123"))
                     .authorizedGrantTypes("authorization_code")
                     .scopes("write", "read")
                     .redirectUris("http://analytics.algafood.com")
+
+                // http://localhost:8081/oauth/authorize?response_type=token&client_id=webadmin&state=abc&redirect_uri=http://web-client.com
+                .and()
+                    .withClient("webadmin")
+                    .authorizedGrantTypes("implicit")
+                    .scopes("write", "read")
+                    .redirectUris("http://web-client.com")
 
                 .and()
                     .withClient("faturamento")
