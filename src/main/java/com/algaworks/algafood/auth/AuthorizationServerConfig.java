@@ -32,6 +32,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private JwtKeyStoreProperties jwtKeyStoreProperties;
+
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         final int UMA_HORA_SEGUNDOS = 60 * 60;
@@ -101,9 +104,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 //        jwtAccessTokenConverter.setSigningKey("Yy#j69bd@2ow8zMIRx4nTv!woJL!LFAj");
 
-        final var jksResource = new ClassPathResource("keystores/algafood.jks");
-        final var keyStorePass = "123456";
-        final var keyPairAlias = "algafood";
+        final var jksResource = new ClassPathResource(jwtKeyStoreProperties.getPath());
+        final var keyStorePass = jwtKeyStoreProperties.getPassword();
+        final var keyPairAlias = jwtKeyStoreProperties.getKeypairAlias();
 
         final var keyStoreKeyFactory = new KeyStoreKeyFactory(jksResource, keyStorePass.toCharArray());
         final var keyPair = keyStoreKeyFactory.getKeyPair(keyPairAlias);
