@@ -1,4 +1,4 @@
-package com.algaworks.algafood.auth;
+package com.algaworks.algafood.auth.core;
 
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.security.crypto.codec.Utf8;
