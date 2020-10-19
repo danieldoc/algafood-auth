@@ -27,6 +27,9 @@ import java.util.Arrays;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
+    private static final String SCOPE_READ = "READ";
+    private static final String SCOPE_WRITE = "WRITE";
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -49,7 +52,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                     .withClient("algafood-web-client")
                     .secret(passwordEncoder.encode("web123"))
                     .authorizedGrantTypes("password", "refresh_token")
-                    .scopes("write", "read")
+                    .scopes(SCOPE_WRITE, SCOPE_READ)
                     .accessTokenValiditySeconds(UMA_HORA_SEGUNDOS * 6) // 6 horas
                     .refreshTokenValiditySeconds(UM_DIA_SEGUNDOS * 15) // 15 dias
 
@@ -64,21 +67,21 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                     .withClient("foodanalytics")
                     .secret(passwordEncoder.encode(""))
                     .authorizedGrantTypes("authorization_code")
-                    .scopes("write", "read")
+                    .scopes(SCOPE_WRITE, SCOPE_READ)
                     .redirectUris("http://analytics.algafood.com")
 
                 // http://localhost:8081/oauth/authorize?response_type=token&client_id=webadmin&state=abc&redirect_uri=http://web-client.com
                 .and()
                     .withClient("webadmin")
                     .authorizedGrantTypes("implicit")
-                    .scopes("write", "read")
+                    .scopes(SCOPE_WRITE, SCOPE_READ)
                     .redirectUris("http://web-client.com")
 
                 .and()
                     .withClient("faturamento")
                     .secret(passwordEncoder.encode("faturamento123"))
                     .authorizedGrantTypes("client_credentials")
-                    .scopes("write", "read")
+                    .scopes(SCOPE_WRITE, SCOPE_READ)
 
                 .and()
                     .withClient("check-token")
