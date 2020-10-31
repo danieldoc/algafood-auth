@@ -21,6 +21,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
+import javax.sql.DataSource;
 import java.util.Arrays;
 
 @Configuration
@@ -42,50 +43,53 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     private JwtKeyStoreProperties jwtKeyStoreProperties;
 
+    @Autowired
+    private DataSource dataSource;
+
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        final int UMA_HORA_SEGUNDOS = 60 * 60;
-        final int UM_DIA_SEGUNDOS = UMA_HORA_SEGUNDOS * 24;
+//        final int UMA_HORA_SEGUNDOS = 60 * 60;
+//        final int UM_DIA_SEGUNDOS = UMA_HORA_SEGUNDOS * 24;
 
-        clients
-                .inMemory()
-                    .withClient("algafood-web-client")
-                    .secret(passwordEncoder.encode("web123"))
-                    .authorizedGrantTypes("password", "refresh_token")
-                    .scopes(SCOPE_WRITE, SCOPE_READ)
-                    .accessTokenValiditySeconds(UMA_HORA_SEGUNDOS * 6) // 6 horas
-                    .refreshTokenValiditySeconds(UM_DIA_SEGUNDOS * 15) // 15 dias
-
-//                http://localhost:8081/oauth/authorize?response_type=code&client_id=foodanalytics&redirect_uri=http://analytics.algafood.com
-
-//                PKCE
-//                Plain
-//                http://localhost:8081/oauth/authorize?response_type=code&client_id=foodanalytics&redirect_uri=http://analytics.algafood.com&code_challenge=teste1234&code_challenge_method=plain
-//                SH256
-//                http://localhost:8081/oauth/authorize?response_type=code&client_id=foodanalytics&redirect_uri=http://analytics.algafood.com&code_challenge=teste1234&code_challenge_method=s256
-                .and()
-                    .withClient("foodanalytics")
-                    .secret(passwordEncoder.encode(""))
-                    .authorizedGrantTypes("authorization_code")
-                    .scopes(SCOPE_WRITE, SCOPE_READ)
-                    .redirectUris("http://analytics.algafood.com")
-
-                // http://localhost:8081/oauth/authorize?response_type=token&client_id=webadmin&state=abc&redirect_uri=http://web-client.com
-                .and()
-                    .withClient("webadmin")
-                    .authorizedGrantTypes("implicit")
-                    .scopes(SCOPE_WRITE, SCOPE_READ)
-                    .redirectUris("http://web-client.com")
-
-                .and()
-                    .withClient("faturamento")
-                    .secret(passwordEncoder.encode("faturamento123"))
-                    .authorizedGrantTypes("client_credentials")
-                    .scopes(SCOPE_WRITE, SCOPE_READ)
-
-                .and()
-                    .withClient("check-token")
-                    .secret(passwordEncoder.encode("123web"));
+        clients.jdbc(dataSource);
+//                .inMemory()
+//                    .withClient("algafood-web-client")
+//                    .secret(passwordEncoder.encode("web123"))
+//                    .authorizedGrantTypes("password", "refresh_token")
+//                    .scopes(SCOPE_WRITE, SCOPE_READ)
+//                    .accessTokenValiditySeconds(UMA_HORA_SEGUNDOS * 6) // 6 horas
+//                    .refreshTokenValiditySeconds(UM_DIA_SEGUNDOS * 15) // 15 dias
+//
+////                http://localhost:8081/oauth/authorize?response_type=code&client_id=foodanalytics&redirect_uri=http://analytics.algafood.com
+//
+////                PKCE
+////                Plain
+////                http://localhost:8081/oauth/authorize?response_type=code&client_id=foodanalytics&redirect_uri=http://analytics.algafood.com&code_challenge=teste1234&code_challenge_method=plain
+////                SH256
+////                http://localhost:8081/oauth/authorize?response_type=code&client_id=foodanalytics&redirect_uri=http://analytics.algafood.com&code_challenge=teste1234&code_challenge_method=s256
+//                .and()
+//                    .withClient("foodanalytics")
+//                    .secret(passwordEncoder.encode(""))
+//                    .authorizedGrantTypes("authorization_code")
+//                    .scopes(SCOPE_WRITE, SCOPE_READ)
+//                    .redirectUris("http://analytics.algafood.com")
+//
+//                // http://localhost:8081/oauth/authorize?response_type=token&client_id=webadmin&state=abc&redirect_uri=http://web-client.com
+//                .and()
+//                    .withClient("webadmin")
+//                    .authorizedGrantTypes("implicit")
+//                    .scopes(SCOPE_WRITE, SCOPE_READ)
+//                    .redirectUris("http://web-client.com")
+//
+//                .and()
+//                    .withClient("faturamento")
+//                    .secret(passwordEncoder.encode("faturamento123"))
+//                    .authorizedGrantTypes("client_credentials")
+//                    .scopes(SCOPE_WRITE, SCOPE_READ)
+//
+//                .and()
+//                    .withClient("check-token")
+//                    .secret(passwordEncoder.encode("123web"));
     }
 
     @Override
